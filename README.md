@@ -88,4 +88,4 @@ License & contributors
 This project is prepared as a Kaggle competition submission. Feel free to fork and iterate; keep `main.py` self-contained for submission.
 
 ---
-Last updated: May 2026
+
