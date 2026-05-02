@@ -1,60 +1,87 @@
 from pathlib import Path
-import tarfile
 import zipfile
 import sys
+import os
 
 ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "main.py"
-OUT = ROOT / "submission.tar.gz"
 OUT_ZIP = ROOT / "submission.zip"
 
 def check_main():
     if not MAIN.exists():
-        print("ERROR: main.py not found in project root.")
+        print(f"ERROR: main.py not found at {MAIN}")
         return False
-    text = MAIN.read_text(encoding='utf-8')
-    if 'def agent(' not in text:
-        print("WARNING: no top-level `def agent(` found in main.py — ensure your Kaggle entrypoint is named `agent`.")
-    else:
-        print("Found `agent` in main.py.")
-    return True
+    try:
+        content = MAIN.read_text(encoding='utf-8')
+        if 'def agent(' not in content:
+            print("WARNING: no top-level `def agent(` found in main.py")
+        else:
+            print(f"✓ Found `agent()` in main.py ({len(content)} bytes)")
+        return True
+    except Exception as e:
+        print(f"ERROR reading main.py: {e}")
+        return False
 
-def make_archive():
-    # Create tar.gz
-    with tarfile.open(OUT, "w:gz") as tf:
-        tf.add(MAIN, arcname="main.py")
-    print(f"✓ Created {OUT}")
-    
-    # Verify tar.gz archive contents
-    with tarfile.open(OUT, "r:gz") as tf:
-        members = tf.getnames()
-        print(f"  Archive contents: {members}")
-        if "main.py" not in members:
-            print("  WARNING: main.py not found at root level in tar.gz!")
-    
-    # Also create ZIP as alternative (Kaggle may prefer ZIP)
-    with zipfile.ZipFile(OUT_ZIP, 'w', zipfile.ZIP_DEFLATED) as zf:
-        zf.write(MAIN, arcname="main.py")
-    print(f"✓ Created {OUT_ZIP} (ZIP format - recommended)")
-    
-    # Verify ZIP archive contents
-    with zipfile.ZipFile(OUT_ZIP, 'r') as zf:
-        members = zf.namelist()
-        print(f"  ZIP contents: {members}")
-        if "main.py" not in members:
-            print("  WARNING: main.py not found at root level in ZIP!")
+def make_zip():
+    """Create submission.zip with main.py at root level."""
+    try:
+        # Remove old archive if exists
+        if OUT_ZIP.exists():
+            os.remove(OUT_ZIP)
+            print(f"Removed old {OUT_ZIP}")
+        
+        # Create fresh ZIP with main.py at root
+        with zipfile.ZipFile(OUT_ZIP, 'w', zipfile.ZIP_DEFLATED) as zf:
+            # Read main.py content as bytes
+            main_content = MAIN.read_bytes()
+            # Write directly to ZIP root with name "main.py"
+            zf.writestr("main.py", main_content)
+        
+        print(f"✓ Created {OUT_ZIP}")
+        
+        # Verify ZIP structure
+        with zipfile.ZipFile(OUT_ZIP, 'r') as zf:
+            names = zf.namelist()
+            print(f"  ZIP contents: {names}")
+            
+            # Check if main.py is exactly at root
+            if "main.py" not in names:
+                print("  ❌ ERROR: main.py NOT in archive!")
+                return False
+            
+            # Verify no subdirectories
+            if any('/' in name for name in names):
+                print(f"  ❌ ERROR: Files in subdirectories found: {names}")
+                return False
+            
+            # Verify content matches
+            archived_content = zf.read("main.py")
+            if archived_content == main_content:
+                print(f"  ✓ Verified: main.py content matches ({len(archived_content)} bytes)")
+            else:
+                print(f"  ❌ ERROR: Content mismatch!")
+                return False
+        
+        return True
+    except Exception as e:
+        print(f"❌ ERROR creating archive: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
 
 def main():
-    ok = check_main()
-    if not ok:
-        sys.exit(2)
-    make_archive()
-    print("\n✓ Submission packages prepared.")
-    print("\nTo submit to Kaggle, use either:")
-    print(f"  - {OUT} (tar.gz format)")
-    print(f"  - {OUT_ZIP} (ZIP format - recommended for Kaggle)")
-    print("\nTo validate locally, run:")
-    print("  python scripts/validate_submission.py")
+    print("=== NOVA Agent Submission Package ===\n")
+    
+    if not check_main():
+        sys.exit(1)
+    
+    print("\nCreating submission archive...")
+    if not make_zip():
+        sys.exit(1)
+    
+    print(f"\n✅ READY FOR SUBMISSION!")
+    print(f"\nSubmit to Kaggle: {OUT_ZIP}")
+    print(f"File size: {OUT_ZIP.stat().st_size} bytes")
 
 if __name__ == '__main__':
     main()
