@@ -1,0 +1,50 @@
+[; (root-commit) 77606c0] chore: sync repo
+ 45 files changed, 4555 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README.md
+ create mode 100644 SUBMISSION.md
+ create mode 100644 __pycache__/main.cpython-312.pyc
+ create mode 100644 __pycache__/server.cpython-312.pyc
+ create mode 100644 data.sqlite
+ create mode 100644 index.html
+ create mode 100644 main.py
+ create mode 100644 package-lock.json
+ create mode 100644 package.json
+ create mode 100644 public/favicon.svg
+ create mode 100644 public/icons.svg
+ create mode 100644 requirements.txt
+ create mode 100644 scripts/git_push.bat
+ create mode 100644 scripts/git_push_out.txt
+ create mode 100644 scripts/mock_out.txt
+ create mode 100644 scripts/package_submission.py
+ create mode 100644 scripts/prepare_submission.py
+ create mode 100644 scripts/test_api_mock.py
+ create mode 100644 scripts/validate_submission.py
+ create mode 100644 server.py
+ create mode 100644 src/App.jsx
+ create mode 100644 src/assets/hero.png
+ create mode 100644 src/assets/typescript.svg
+ create mode 100644 src/assets/vite.svg
+ create mode 100644 src/components/AgentArchitecture.jsx
+ create mode 100644 src/components/CombatSimulator.jsx
+ create mode 100644 src/components/Footer.jsx
+ create mode 100644 src/components/Header.jsx
+ create mode 100644 src/components/InnovationShowcase.jsx
+ create mode 100644 src/components/MetricsBar.jsx
+ create mode 100644 src/components/OrbitalCanvas.jsx
+ create mode 100644 src/components/StrategyPanel.jsx
+ create mode 100644 src/components/Timeline.jsx
+ create mode 100644 src/counter.ts
+ create mode 100644 src/index.css
+ create mode 100644 src/main.jsx
+ create mode 100644 src/main.ts
+ create mode 100644 src/style.css
+ create mode 100644 submission.py
+ create mode 100644 submission.tar.gz
+ create mode 100644 test_agent.py
+ create mode 100644 tools/tournament.py
+ create mode 100644 tsconfig.json
+ create mode 100644 vite.config.js
+To https://github.com/PERO-99/nova-orbit-agent.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.

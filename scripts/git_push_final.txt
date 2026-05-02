@@ -1,0 +1,10 @@
+error: pathspec 'fix:' did not match any file(s) known to git
+error: pathspec 'ensure' did not match any file(s) known to git
+error: pathspec 'at' did not match any file(s) known to git
+error: pathspec 'archive' did not match any file(s) known to git
+error: pathspec 'root' did not match any file(s) known to git
+error: pathspec 'and' did not match any file(s) known to git
+error: pathspec 'add' did not match any file(s) known to git
+error: pathspec 'ZIP' did not match any file(s) known to git
+error: pathspec 'format' did not match any file(s) known to git
+error: pathspec 'support\ ; git push origin main  ;' did not match any file(s) known to git
